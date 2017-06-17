@@ -4,8 +4,12 @@ $(document).ready(function() {
     var historyPointer = -1;
     var interval = 100;
 
-    var wordsList = words.split("\n");
-    delete words;
+    var words1List = words1.split("\n");
+    var words2List = words2.split("\n");
+    delete words1;
+    delete words2;
+    var wordsList = words1List;
+    var complexWords = false;
 
     $('html').click(function(e) {
         if ($("p").css("opacity") !== 0) {
@@ -24,10 +28,23 @@ $(document).ready(function() {
         historyPointer = -1;
         $("h1").html(wordsList[Math.floor(Math.random() * wordsList.length)]);
         history.push($("h1").html());
+        if ($("p").css("opacity") !== 0) {
+            $("p").css("opacity", 0)
+        }    
     }
 
     $(document).keydown(function(e) {
         switch(e.which) {
+            case 32:
+            complexWords = !complexWords;
+            if (complexWords) {
+                wordsList = words2List;
+            }
+            else {
+                wordsList = words1List;
+            }
+            break;
+
             case 37:
             if (historyPointer === -1) {
                 historyPointer = history.length - 2;
@@ -74,7 +91,7 @@ $(document).ready(function() {
                 randomWord();
             }
         }
-        $("h6").html("Interval: " + interval);
+        $("h6").html("Interval: " + interval + " | Words: " + (complexWords ? "Complex" : "Simple"));  
         counter++;
     }, 5)
 });

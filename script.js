@@ -5,7 +5,10 @@ $(document).ready(function() {
     var wordsList = words.split("\n");
     delete words;
 
-    $('html').click(function(e) {    
+    $('html').click(function(e) {
+        if ($("p").css("opacity") !== 0) {
+            $("p").css("opacity", 0)
+        }    
         flashing = !flashing;
     });
 
@@ -14,11 +17,13 @@ $(document).ready(function() {
             case 38: // up
             if (interval > 25) {
                 interval -= 20;
+                counter = 0
             }
             break;
 
             case 40: // down
             interval += 20;
+            counter = 0;
             break;
 
             default: return; // exit this handler for other keys
@@ -28,7 +33,7 @@ $(document).ready(function() {
 
     counter = 0;
     setInterval(function() {
-        if (counter % interval == 0) {
+        if (counter % interval === 0) {
             if (flashing) {  
                 $("h1").html(wordsList[Math.floor(Math.random() * wordsList.length)]);
             }

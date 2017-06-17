@@ -14,16 +14,30 @@ $(document).ready(function() {
 
     $(document).keydown(function(e) {
         switch(e.which) {
+            case 37:
+            counter = 0;
+            if (!flashing) {
+                $("h1").html(wordsList[Math.floor(Math.random() * wordsList.length)]);
+            }
+            break;
+
             case 38: // up
             if (interval > 25) {
                 interval -= 20;
-                counter = 0
+                counter = 1;
+            }
+            break;
+
+            case 39:
+            counter = 0;
+            if (!flashing) {
+                $("h1").html(wordsList[Math.floor(Math.random() * wordsList.length)]);
             }
             break;
 
             case 40: // down
             interval += 20;
-            counter = 0;
+            counter = 1;
             break;
 
             default: return; // exit this handler for other keys
@@ -36,9 +50,6 @@ $(document).ready(function() {
         if (counter % interval === 0) {
             if (flashing) {  
                 $("h1").html(wordsList[Math.floor(Math.random() * wordsList.length)]);
-            }
-            else {
-                $("h1").html("Click to Start/Stop")
             }
         }
         counter++;

@@ -1,5 +1,7 @@
 var flashing = false;
 $(document).ready(function() {
+    var history = [];
+    var historyPointer = -1;
     var interval = 100;
 
     var wordsList = words.split("\n");
@@ -10,15 +12,30 @@ $(document).ready(function() {
             $("p").css("opacity", 0)
         }    
         flashing = !flashing;
+        if (flashing) {
+            $("h1").css("color", "#000")
+        }
+        else {
+            $("h1").css("color", "#555")
+        }
     });
+
+    function randomWord() {
+        historyPointer = -1;
+        $("h1").html(wordsList[Math.floor(Math.random() * wordsList.length)]);
+        history.push($("h1").html());
+    }
 
     $(document).keydown(function(e) {
         switch(e.which) {
             case 37:
-            counter = 0;
-            if (!flashing) {
-                $("h1").html(wordsList[Math.floor(Math.random() * wordsList.length)]);
+            if (historyPointer === -1) {
+                historyPointer = history.length - 2;
             }
+            else if (historyPointer > 0) {
+                historyPointer--;
+            }
+            $("h1").html(history[historyPointer]);
             break;
 
             case 38: // up
@@ -31,7 +48,12 @@ $(document).ready(function() {
             case 39:
             counter = 0;
             if (!flashing) {
-                $("h1").html(wordsList[Math.floor(Math.random() * wordsList.length)]);
+                if (historyPointer === -1 || historyPointer === history.length -1)
+                    randomWord();
+                else {
+                    historyPointer++;
+                    $("h1").html(history[historyPointer]);
+                }        
             }
             break;
 
@@ -48,10 +70,11 @@ $(document).ready(function() {
     counter = 0;
     setInterval(function() {
         if (counter % interval === 0) {
-            if (flashing) {  
-                $("h1").html(wordsList[Math.floor(Math.random() * wordsList.length)]);
+            if (flashing) {
+                randomWord();
             }
         }
+        $("h6").html("Interval: " + interval);
         counter++;
     }, 5)
 });
